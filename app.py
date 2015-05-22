@@ -15,5 +15,20 @@ def hello():
 def hello_name(name):
 	return "Hello {}!".format(name)
 
+	
+@app.route('/submit', methods=['POST'])
+def submit():
+	text = request.form["paste"]
+	text = text.encode("ascii", errors="ignore")
+
+	paste = Paste(text, "Anonymous")
+
+	db.session.add(paste)
+	db.session.commit()
+
+	print "added paste by %s with id %s" % (poster, paste.id)
+	return render_template("success.html", id=paste.id)
+
+	
 if __name__ == "__main__":
 	app.run()
