@@ -1,8 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>{{ username }} said:</h1>
-    <p>
-        {{ message }}
-    </p>
-    <a href="{{ url_for('home') }}">Say something else</a>
+    <h1>{{ username }}'s data:</h1>
+    <div style='width:300px;height:100px;border:1px solid lightgray;padding:3px;'>
+        {{ comment }}
+    </div>
+	<pre style='width:500px;word-break:break-word;padding:3px;'>{{ random }}</pre>
+    <a href="{{ url_for('home') }}">Do it again</a>
 {% endblock %}
