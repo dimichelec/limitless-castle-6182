@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, abort, session
+from flask import Flask, render_template, request, redirect, url_for, abort, session, jsonify
 import random
 
 app = Flask(__name__)
@@ -12,18 +12,31 @@ def home():
 def signup():
 	session['username'] = request.form['username']
 	session['comment'] = request.form['comment']
-	return redirect(url_for('message'))
+	return redirect(url_for('output'))
 
-@app.route('/message')
-def message():
+@app.route('/output')
+def output():
 	if not 'username' in session:
 		return abort(403)
-	return render_template('message.html',
+	return render_template('output.html',
 		username=session['username'], comment=session['comment'],
-		random=''.join(random.choice('0123456789abcdef') for i in range(256))
+		random=''.join(random.choice('0123456789abcdef') for i in range(256)),
+		json=jsonify(indent=2, sort_keys=False, items={
+			'username': session['username'],
+			'comment': session['comment'],
+			'data': ''.join(random.choice('0123456789abcdef') for i in range(256))
+		})
 	)
 
+@app.route('/outputjson')
+def outputjson():
+	if not 'username' in session:
+		return abort(403)
+	return jsonify(items={
+		'username': session['username'],
+		'comment': session['comment'],
+		'data': ''.join(random.choice('0123456789abcdef') for i in range(256))
+	})
 
 if __name__ == "__main__":
-	app.debug = True
 	app.run()
