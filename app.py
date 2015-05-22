@@ -7,7 +7,7 @@ app.config['SECRET_KEY'] = 'JDas8dj123e&&@0h';
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+	return render_template('index.html')
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -17,9 +17,9 @@ def signup():
 
 @app.route('/message')
 def message():
-    if not 'username' in session:
-        return abort(403)
-    return render_template('message.html', username=session['username'], message=session['message'])
+	if not 'username' in session:
+		return abort(403)
+	return render_template('message.html', username=session['username'], message=session['message'])
 
 
 if __name__ == "__main__":
