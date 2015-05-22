@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, abort, ses
 
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'JDas8dj123e&&@0h';
 
 
 @app.route('/')
@@ -10,9 +11,9 @@ def home():
 
 @app.route('/signup', methods=['POST'])
 def signup():
-    session['username'] = request.form['username']
-    session['message'] = request.form['message']
-    return redirect(url_for('message'))
+	session['username'] = request.form['username']
+	session['message'] = request.form['message']
+	return redirect(url_for('message'))
 
 @app.route('/message')
 def message():
