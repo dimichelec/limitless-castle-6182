@@ -1,34 +1,25 @@
-from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
-import os
+from flask import Flask, render_template, request, redirect, url_for, abort, session
+
 
 app = Flask(__name__)
-app.config.from_pyfile('config.py')
-db = SQLAlchemy(app)
-
-@app.route("/")
-def hello():
-	return "Hello World!"
 
 
-@app.route("/<name>")
-def hello_name(name):
-	return "Hello {}!".format(name)
+@app.route('/')
+def home():
+    return render_template('index.html')
 
-	
-@app.route('/submit', methods=['POST'])
-def submit():
-	text = request.form["paste"]
-	text = text.encode("ascii", errors="ignore")
+@app.route('/signup', methods=['POST'])
+def signup():
+    session['username'] = request.form['username']
+    session['message'] = request.form['message']
+    return redirect(url_for('message'))
 
-	paste = Paste(text, "Anonymous")
+@app.route('/message')
+def message():
+    if not 'username' in session:
+        return abort(403)
+    return render_template('message.html', username=session['username'], message=session['message'])
 
-	db.session.add(paste)
-	db.session.commit()
 
-	print "added paste by %s with id %s" % (poster, paste.id)
-	return render_template("success.html", id=paste.id)
-
-	
 if __name__ == "__main__":
 	app.run()
